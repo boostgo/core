@@ -7,6 +7,7 @@ import (
 	"github.com/boostgo/core/echox"
 	"github.com/boostgo/core/log"
 	"github.com/boostgo/core/log/logx"
+	"github.com/boostgo/core/mongox"
 	"github.com/boostgo/core/redis"
 	"github.com/boostgo/core/sql"
 	"github.com/boostgo/core/timex"
@@ -366,4 +367,31 @@ func (k Keycloak) Log() {
 		Info().
 		Str("host", k.Host).
 		Msg("Keycloak config")
+}
+
+type Mongo struct {
+	mongox.Config
+}
+
+func (m Mongo) Client(opts ...mongox.Option) (mongox.Client, error) {
+	return mongox.NewClient(m.Config, opts...)
+}
+
+func (m Mongo) MustClient(opts ...mongox.Option) mongox.Client {
+	return mongox.MustClient(m.Config, opts...)
+}
+
+func (m Mongo) Log() {
+	log.
+		Info().
+		Str("uri", m.URI).
+		Str("database", m.Database).
+		Str("username", m.Username).
+		Uint64("max_pool_size", m.MaxPoolSize).
+		Uint64("min_pool_size", m.MinPoolSize).
+		Object("connect_timeout", m.ConnectTimeout).
+		Object("server_timeout", m.ServerTimeout).
+		Bool("tls", m.TLS).
+		Str("auth_source", m.AuthSource).
+		Msg("Mongo config")
 }
