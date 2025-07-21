@@ -8,12 +8,12 @@ import (
 )
 
 type Duration struct {
-	Nanoseconds  int64 `json:"nanoseconds"`
-	Milliseconds int64 `json:"milliseconds"`
-	Seconds      int   `json:"seconds"`
-	Minutes      int   `json:"minutes"`
-	Hours        int   `json:"hours"`
-	Days         int   `json:"days"`
+	Nanoseconds  int64 `json:"nanoseconds" yaml:"nanoseconds"`
+	Milliseconds int64 `json:"milliseconds" yaml:"milliseconds"`
+	Seconds      int   `json:"seconds" yaml:"seconds"`
+	Minutes      int   `json:"minutes" yaml:"minutes"`
+	Hours        int   `json:"hours" yaml:"hours"`
+	Days         int   `json:"days" yaml:"days"`
 }
 
 func NewDuration(duration time.Duration) Duration {
