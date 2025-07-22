@@ -15,6 +15,13 @@ var (
 	ErrConcernReadUnsupported  = errorx.New("mongo.concern.read.unsupported")
 
 	ErrMigrate = errorx.New("mongo.migrate")
+
+	ErrTxWrongObject      = errorx.New("mongo.tx.wrong_object")
+	ErrTxStartSession     = errorx.New("mongo.tx.start_session")
+	ErrTxStartTransaction = errorx.New("mongo.tx.start_transaction")
+	ErrTxNoTransaction    = errorx.New("mongo.tx.no_transaction")
+	ErrTxCommit           = errorx.New("mongo.tx.commit")
+	ErrTxRollback         = errorx.New("mongo.tx.rollback")
 )
 
 type createIndexContext struct {
@@ -52,8 +59,8 @@ type unsupportedConcernContext struct {
 	ConcernType string `json:"concern_type"`
 }
 
-func newUnsupportedConcernError(provide, concernType string) error {
-	return ErrConcernWriteUnsupported.
+func newUnsupportedConcernError(err *errorx.Error, provide, concernType string) error {
+	return err.
 		SetData(unsupportedConcernContext{
 			Provide:     provide,
 			ConcernType: concernType,

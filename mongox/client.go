@@ -21,6 +21,7 @@ type Client interface {
 	Database() *mongo.Database
 	Collection(name string) *mongo.Collection
 	EnsureIndexes(ctx context.Context, collection string, indexes []mongo.IndexModel) error
+	StartSession() (mongo.Session, error)
 }
 
 type Config struct {
@@ -129,7 +130,7 @@ func NewClient(cfg Config, opts ...Option) (Client, error) {
 		case "snapshot":
 			readConcern = readconcern.Snapshot()
 		default:
-			return nil, newUnsupportedConcernError(cfg.ReadConcern, "read")
+			return nil, newUnsupportedConcernError(ErrConcernReadUnsupported, cfg.ReadConcern, "read")
 		}
 
 		clientOptions.SetReadConcern(readConcern)
@@ -148,7 +149,7 @@ func NewClient(cfg Config, opts ...Option) (Client, error) {
 			if w, err := strconv.Atoi(cfg.WriteConcern); err == nil {
 				writeConcern = writeconcern.New(writeconcern.W(w))
 			} else {
-				return nil, newUnsupportedConcernError(cfg.WriteConcern, "write")
+				return nil, newUnsupportedConcernError(ErrConcernWriteUnsupported, cfg.WriteConcern, "write")
 			}
 		}
 
@@ -213,4 +214,8 @@ func (c *singleClient) EnsureIndexes(ctx context.Context, collection string, ind
 	}
 
 	return nil
+}
+
+func (c *singleClient) StartSession() (mongo.Session, error) {
+	return c.client.StartSession()
 }

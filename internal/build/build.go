@@ -14,6 +14,7 @@ import (
 	"github.com/boostgo/core/log"
 	"github.com/boostgo/core/log/logx"
 	"github.com/boostgo/core/mathx"
+	"github.com/boostgo/core/mongox"
 	"github.com/boostgo/core/orderedmap"
 	"github.com/boostgo/core/pagex"
 	"github.com/boostgo/core/queuex"
@@ -120,4 +121,7 @@ func Build() {
 
 	_ = translit.LatinByCyrillic("")
 	log.Info().Msg("translit +")
+
+	_ = mongox.ErrConcernReadUnsupported
+	log.Info().Msg("mongox +")
 }
