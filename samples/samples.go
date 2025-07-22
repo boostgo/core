@@ -378,6 +378,30 @@ func (m Mongo) Client(opts ...mongox.Option) (mongox.Client, error) {
 }
 
 func (m Mongo) MustClient(opts ...mongox.Option) mongox.Client {
+	if m.ConnectTimeout.IsZero() {
+		m.ConnectTimeout = timex.Duration{
+			Seconds: 10,
+		}
+	}
+
+	if m.ServerTimeout.IsZero() {
+		m.ServerTimeout = timex.Duration{
+			Seconds: 10,
+		}
+	}
+
+	if m.SocketTimeout.IsZero() {
+		m.SocketTimeout = timex.Duration{
+			Seconds: 10,
+		}
+	}
+
+	if m.HeartbeatTimeout.IsZero() {
+		m.HeartbeatTimeout = timex.Duration{
+			Seconds: 10,
+		}
+	}
+
 	return mongox.MustClient(m.Config, opts...)
 }
 
