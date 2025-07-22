@@ -370,7 +370,7 @@ func (k Keycloak) Log() {
 }
 
 type Mongo struct {
-	mongox.Config
+	mongox.Config `json:"mongo.config" yaml:",inline"`
 }
 
 func (m Mongo) Client(opts ...mongox.Option) (mongox.Client, error) {
