@@ -3,17 +3,8 @@ package sql
 import (
 	"context"
 	"database/sql"
-	"errors"
-
-	"github.com/boostgo/core/errorx"
-
 	"github.com/jmoiron/sqlx"
 )
-
-// NotFound check if provided error is not found error
-func NotFound(err error) bool {
-	return errors.Is(err, sql.ErrNoRows) || errors.Is(err, errorx.ErrNotFound)
-}
 
 // DB description of all methods of sqlx package.
 //

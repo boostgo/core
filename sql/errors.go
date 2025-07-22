@@ -1,6 +1,9 @@
 package sql
 
-import "github.com/boostgo/core/errorx"
+import (
+	"github.com/boostgo/core/errorx"
+	"github.com/boostgo/core/sql/duplicate"
+)
 
 var (
 	ErrOpenConnect = errorx.New("sql.open_connect")
@@ -24,6 +27,10 @@ var (
 
 	ErrStatementPrepare      = errorx.New("sql.statement.prepare")
 	ErrStatementExecuteQuery = errorx.New("sql.statement.execute_query")
+
+	ErrDuplicate           = errorx.New("sql.duplicate")
+	ErrForeignKeyViolation = errorx.New("sql.foreign_key_violation")
+	ErrNotNull             = errorx.New("sql.not_null")
 )
 
 type openConnectContext struct {
@@ -66,4 +73,38 @@ func NewExecuteQueryError(err error, operation string) error {
 			Operation: operation,
 			Error:     err,
 		})
+}
+
+type duplicateContext struct {
+	Field      string `json:"field"`
+	Value      string `json:"value"`
+	Constraint string `json:"constraint"`
+}
+
+func NewDuplicateError(duplicateErr *duplicate.Error) error {
+	return ErrDuplicate.SetData(duplicateContext{
+		Field:      duplicateErr.Field,
+		Value:      duplicateErr.Value,
+		Constraint: duplicateErr.Constraint,
+	})
+}
+
+type foreignKeyViolationContext struct {
+	Details string `json:"details"`
+}
+
+func NewForeignKeyViolationError(details string) error {
+	return ErrForeignKeyViolation.SetData(foreignKeyViolationContext{
+		Details: details,
+	})
+}
+
+type notNullContext struct {
+	Column string `json:"column"`
+}
+
+func NewNotNullError(column string) error {
+	return ErrNotNull.SetData(notNullContext{
+		Column: column,
+	})
 }
