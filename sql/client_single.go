@@ -222,14 +222,3 @@ func (c *clientSingle) printLog(ctx context.Context, queryType, query string, ar
 		Strs("args", convertedArgs).
 		Send()
 }
-
-// Page returns offset & limit by pagination
-func Page(pageSize int64, page int) (offset int, limit int) {
-	if page == 0 {
-		page = 1
-	}
-
-	offset = (page - 1) * int(pageSize)
-	limit = int(pageSize)
-	return offset, limit
-}
