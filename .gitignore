@@ -3,5 +3,9 @@
 .DS_Store
 
 cmd
+config
+translations
+migrations
+scripts
 
 codebase.md

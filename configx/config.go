@@ -10,6 +10,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/boostgo/core/defaults"
 	"github.com/ilyakaznacheev/cleanenv"
 )
 
@@ -18,7 +19,11 @@ import (
 // Provided paths can contain as json/yaml file and also .env file
 func Read(export any, path ...string) error {
 	if len(path) == 0 {
-		return cleanenv.ReadEnv(export)
+		if err := cleanenv.ReadEnv(export); err != nil {
+			return err
+		}
+
+		return defaults.Set(export)
 	}
 
 	for _, p := range path {
@@ -31,7 +36,7 @@ func Read(export any, path ...string) error {
 		}
 	}
 
-	return nil
+	return defaults.Set(export)
 }
 
 // MustRead calls Read function and if catch error throws panic
