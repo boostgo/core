@@ -9,11 +9,6 @@
 // - Transactor implementation. Implementation based on manipulating transaction from context.
 package sql
 
-type SortBy struct {
-	Field string
-	Asc   bool
-}
-
 // Page returns offset & limit by pagination
 func Page(pageSize int64, page int) (offset int, limit int) {
 	if page == 0 {
