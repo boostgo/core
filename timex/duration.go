@@ -58,6 +58,12 @@ func (d Duration) Duration() time.Duration {
 	return 0
 }
 
+func (d Duration) IsZero() bool {
+	return d.Nanoseconds == 0 && d.Milliseconds == 0 &&
+		d.Seconds == 0 && d.Minutes == 0 && d.Hours == 0 &&
+		d.Days == 0
+}
+
 func (d Duration) MarshalZerologObject(e *zerolog.Event) {
 	e.Int64("nanoseconds", d.Nanoseconds)
 	e.Int64("milliseconds", d.Milliseconds)
