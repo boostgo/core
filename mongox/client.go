@@ -25,16 +25,16 @@ type Client interface {
 }
 
 type Config struct {
-	URI        string `json:"uri" yaml:"uri"`
+	URI        string `json:"uri" yaml:"uri" default:"mongodb://localhost:27017"`
 	Database   string `json:"database" yaml:"database"`
 	Username   string `json:"username" yaml:"username"`
 	Password   string `json:"password" yaml:"password"`
-	TLS        bool   `json:"tls" yaml:"tls"`
-	AuthSource string `json:"auth_source" yaml:"authSource"`
+	TLS        bool   `json:"tls" yaml:"tls" default:"false"`
+	AuthSource string `json:"auth_source" yaml:"authSource" default:"admin"`
 
 	// connection pool
-	MaxPoolSize     uint64         `json:"max_pool_size" yaml:"maxPoolSize"`
-	MinPoolSize     uint64         `json:"min_pool_size" yaml:"minPoolSize"`
+	MaxPoolSize     uint64         `json:"max_pool_size" yaml:"maxPoolSize" default:"50"`
+	MinPoolSize     uint64         `json:"min_pool_size" yaml:"minPoolSize" default:"20"`
 	MaxConnIdleTime timex.Duration `json:"max_conn_idle_time" yaml:"maxConnIdleTime"`
 	MaxConnecting   uint64         `json:"max_connecting" yaml:"maxConnecting"`
 
@@ -45,8 +45,8 @@ type Config struct {
 	HeartbeatTimeout timex.Duration `json:"heartbeat_timeout" yaml:"heartbeatTimeout"`
 
 	// retry
-	RetryWrites  bool           `json:"retry_writes" yaml:"retryWrites"`
-	RetryReads   bool           `json:"retry_reads" yaml:"retryReads"`
+	RetryWrites  bool           `json:"retry_writes" yaml:"retryWrites" default:"true"`
+	RetryReads   bool           `json:"retry_reads" yaml:"retryReads" default:"true"`
 	MaxRetryTime timex.Duration `json:"max_retry_time" yaml:"maxRetryTime"`
 
 	// read preference

@@ -29,8 +29,8 @@ func (s Settings) Init() {
 }
 
 type Server struct {
-	Host         string         `json:"host" yaml:"host"`
-	Port         int            `json:"port" yaml:"port"`
+	Host         string         `json:"host" yaml:"host" default:"0.0.0.0"`
+	Port         int            `json:"port" yaml:"port" default:"80"`
 	ShutdownWait timex.Duration `json:"shutdown_wait" yaml:"shutdownWait"`
 }
 
@@ -156,9 +156,9 @@ func (a Auth) Log() {
 }
 
 type Translate struct {
-	Path      string             `json:"path" yaml:"path"`
-	Extension string             `json:"extension" yaml:"extension"`
-	Header    string             `json:"header" yaml:"header"`
+	Path      string             `json:"path" yaml:"path" default:"./translations"`
+	Extension string             `json:"extension" yaml:"extension" default:".yaml"`
+	Header    string             `json:"header" yaml:"header" default:"Content-Language"`
 	Locales   []translate.Locale `json:"locales" yaml:"locales"`
 }
 
@@ -206,8 +206,8 @@ func (t Translate) Log() {
 }
 
 type SQL struct {
-	Host               string `json:"host" yaml:"host"`
-	Port               int    `json:"port" yaml:"port"`
+	Host               string `json:"host" yaml:"host" default:"localhost"`
+	Port               int    `json:"port" yaml:"port" default:"5432"`
 	Username           string `json:"username" yaml:"username"`
 	Password           string `json:"password" yaml:"password"`
 	Database           string `json:"database" yaml:"database"`
@@ -218,7 +218,7 @@ type SQL struct {
 	MaxIdleTime        int    `json:"max_idle_time" yaml:"maxIdleTime"`
 	ReadTimeout        int    `json:"read_timeout" yaml:"readTimeout"`
 	WriteTimeout       int    `json:"write_timeout" yaml:"writeTimeout"`
-	Driver             string `json:"driver" yaml:"driver"`
+	Driver             string `json:"driver" yaml:"driver" default:"postgres"`
 }
 
 func (s SQL) ConnectionString() string {
@@ -274,10 +274,10 @@ func (s SQL) Log() {
 }
 
 type RedisSingle struct {
-	Address  string `json:"address" yaml:"address"`
-	Port     int    `json:"port" yaml:"port"`
+	Address  string `json:"address" yaml:"address" default:"localhost"`
+	Port     int    `json:"port" yaml:"port" default:"6379"`
 	Password string `json:"password" yaml:"password"`
-	DB       int    `json:"db" yaml:"db"`
+	DB       int    `json:"db" yaml:"db" default:"0"`
 }
 
 func (r RedisSingle) Connect(password ...string) (redis.Client, error) {
