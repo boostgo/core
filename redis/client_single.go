@@ -540,3 +540,24 @@ func (c *singleClient) ScriptLoad(ctx context.Context, script string) (string, e
 func (c *singleClient) XGroupCreateMkStream(ctx context.Context, stream, group, start string) (string, error) {
 	return c.client.XGroupCreateMkStream(ctx, stream, group, start).Result()
 }
+
+func (c *singleClient) XReadGroup(ctx context.Context, args XReadGroupArgs) ([]XStream, error) {
+	streams, err := c.client.XReadGroup(ctx, args.Value()).Result()
+	if err != nil {
+		return nil, err
+	}
+
+	converted := make([]XStream, len(streams))
+	for i := range streams {
+		converted[i] = XStream{
+			Stream:   streams[i].Stream,
+			Messages: streams[i].Messages,
+		}
+	}
+
+	return converted, nil
+}
+
+func (c *singleClient) XAck(ctx context.Context, stream, group string, ids ...string) (int64, error) {
+	return c.client.XAck(ctx, stream, group, ids...).Result()
+}

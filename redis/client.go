@@ -16,12 +16,6 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-type XAddArgs redis.XAddArgs
-
-func (a XAddArgs) Value() *redis.XAddArgs {
-	return (*redis.XAddArgs)(&a)
-}
-
 type Client interface {
 	io.Closer
 
@@ -79,6 +73,8 @@ type Client interface {
 	ScriptLoad(ctx context.Context, script string) (string, error)
 
 	XGroupCreateMkStream(ctx context.Context, stream, group, start string) (string, error)
+	XReadGroup(ctx context.Context, args XReadGroupArgs) ([]XStream, error)
+	XAck(ctx context.Context, stream, group string, ids ...string) (int64, error)
 }
 
 func validate(ctx context.Context, key string) error {

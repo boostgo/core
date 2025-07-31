@@ -787,6 +787,37 @@ func (c *shardClient) XGroupCreateMkStream(ctx context.Context, stream, group, s
 	return raw.Client().XGroupCreateMkStream(ctx, stream, group, start).Result()
 }
 
+func (c *shardClient) XReadGroup(ctx context.Context, args XReadGroupArgs) ([]XStream, error) {
+	raw, err := c.clients.Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	streams, err := raw.Client().XReadGroup(ctx, args.Value()).Result()
+	if err != nil {
+		return nil, err
+	}
+
+	converted := make([]XStream, len(streams))
+	for i := range streams {
+		converted[i] = XStream{
+			Stream:   streams[i].Stream,
+			Messages: streams[i].Messages,
+		}
+	}
+
+	return converted, nil
+}
+
+func (c *shardClient) XAck(ctx context.Context, stream, group string, ids ...string) (int64, error) {
+	raw, err := c.clients.Get(ctx)
+	if err != nil {
+		return 0, err
+	}
+
+	return raw.Client().XAck(ctx, stream, group, ids...).Result()
+}
+
 type ShardClient interface {
 	Key() string
 	Conditions() []string
