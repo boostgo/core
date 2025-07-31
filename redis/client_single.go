@@ -536,3 +536,7 @@ func (c *singleClient) ScriptKill(ctx context.Context) (string, error) {
 func (c *singleClient) ScriptLoad(ctx context.Context, script string) (string, error) {
 	return c.client.ScriptLoad(ctx, script).Result()
 }
+
+func (c *singleClient) XGroupCreateMkStream(ctx context.Context, stream, group, start string) (string, error) {
+	return c.client.XGroupCreateMkStream(ctx, stream, group, start).Result()
+}

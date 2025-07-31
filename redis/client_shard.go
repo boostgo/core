@@ -778,6 +778,15 @@ func (c *shardClient) ScriptLoad(ctx context.Context, script string) (string, er
 	return raw.Client().ScriptLoad(ctx, script).Result()
 }
 
+func (c *shardClient) XGroupCreateMkStream(ctx context.Context, stream, group, start string) (string, error) {
+	raw, err := c.clients.Get(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	return raw.Client().XGroupCreateMkStream(ctx, stream, group, start).Result()
+}
+
 type ShardClient interface {
 	Key() string
 	Conditions() []string

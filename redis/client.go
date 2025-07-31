@@ -77,6 +77,8 @@ type Client interface {
 	ScriptFlush(ctx context.Context) (string, error)
 	ScriptKill(ctx context.Context) (string, error)
 	ScriptLoad(ctx context.Context, script string) (string, error)
+
+	XGroupCreateMkStream(ctx context.Context, stream, group, start string) (string, error)
 }
 
 func validate(ctx context.Context, key string) error {
