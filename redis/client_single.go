@@ -544,6 +544,10 @@ func (c *singleClient) XGroupCreateMkStream(ctx context.Context, stream, group, 
 func (c *singleClient) XReadGroup(ctx context.Context, args XReadGroupArgs) ([]XStream, error) {
 	streams, err := c.client.XReadGroup(ctx, args.Value()).Result()
 	if err != nil {
+		if errors.Is(err, redis.Nil) {
+			return nil, errorx.ErrNotFound
+		}
+
 		return nil, err
 	}
 
