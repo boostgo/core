@@ -19,6 +19,7 @@ type Connector struct {
 	binaryParameters bool
 	writeTimeout     int
 	readTimeout      int
+	ssl              bool
 
 	timeout time.Duration
 
@@ -133,6 +134,12 @@ func (connector *Connector) ConnectionMaxLifetime(connectionMaxLifetime time.Dur
 	return connector
 }
 
+// SSL set SSL
+func (connector *Connector) SSL(ssl bool) *Connector {
+	connector.ssl = ssl
+	return connector
+}
+
 // Build connection string
 func (connector *Connector) Build() string {
 	var binaryParameters string
@@ -145,11 +152,19 @@ func (connector *Connector) Build() string {
 		schema = " search_path=" + connector.schema
 	}
 
+	var ssl string
+	if connector.ssl {
+		ssl = "require"
+	} else {
+		ssl = "disable"
+	}
+
 	return fmt.Sprintf(
-		"host=%s port=%d user=%s password=%s dbname=%s sslmode=disable%s%s",
+		"host=%s port=%d user=%s password=%s dbname=%s sslmode=%s%s%s",
 		connector.host, connector.port,
 		connector.username, connector.password,
 		connector.database,
+		ssl,
 		binaryParameters,
 		schema,
 	)

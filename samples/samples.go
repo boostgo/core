@@ -219,6 +219,7 @@ type SQL struct {
 	ReadTimeout        int    `json:"read_timeout" yaml:"readTimeout"`
 	WriteTimeout       int    `json:"write_timeout" yaml:"writeTimeout"`
 	Driver             string `json:"driver" yaml:"driver" default:"postgres"`
+	SSL                bool   `json:"ssl" yaml:"ssl" default:"false"`
 }
 
 func (s SQL) ConnectionString() string {
@@ -235,7 +236,8 @@ func (s SQL) ConnectionString() string {
 		ConnectionMaxLifetime(time.Duration(s.MaxLifetime) * time.Second).
 		MaxIdleTime(time.Duration(s.MaxIdleTime) * time.Second).
 		ReadTimeout(s.ReadTimeout).
-		WriteTimeout(s.WriteTimeout)
+		WriteTimeout(s.WriteTimeout).
+		SSL(s.SSL)
 
 	if s.Driver == sql.ChDriver {
 		return connector.BuildClickhouse()
