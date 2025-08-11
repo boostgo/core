@@ -41,5 +41,5 @@ func wrapFieldWithAlias(field string, alias ...string) string {
 		setAlias = alias[0]
 	}
 
-	return fmt.Sprintf("%s%s", setAlias, field)
+	return fmt.Sprintf("%s.%s", setAlias, field)
 }
