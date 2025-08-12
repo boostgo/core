@@ -38,8 +38,8 @@ func (p Params) Direction() string {
 func wrapFieldWithAlias(field string, alias ...string) string {
 	var setAlias string
 	if len(alias) > 0 {
-		setAlias = alias[0]
+		setAlias = alias[0] + "."
 	}
 
-	return fmt.Sprintf("%s.%s", setAlias, field)
+	return fmt.Sprintf("%s%s", setAlias, field)
 }
