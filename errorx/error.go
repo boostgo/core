@@ -112,7 +112,53 @@ func (e *Error) Unwrap() error {
 //	if custom - use equals method.
 //	If not custom - unwrap current error and compare unwrapped inner errors with provided target
 func (e *Error) Is(target error) bool {
-	return e.message == target.Error()
+	if target == nil {
+		return false
+	}
+
+	// Проверяем, совпадает ли текущая ошибка с target
+	var convertedTarget *Error
+	if errors.As(target, &convertedTarget) {
+		if e.message == convertedTarget.message {
+			return true
+		}
+	} else {
+		// Если target не является *Error, сравниваем по сообщению
+		if e.message == target.Error() {
+			return true
+		}
+	}
+
+	// Проверяем, является ли target joinErrors
+	var joinedTarget *joinErrors
+	if errors.As(target, &joinedTarget) {
+		// Проверяем, содержит ли joinErrors текущую ошибку
+		for _, err := range joinedTarget.errors {
+			if errors.Is(e, err) {
+				return true
+			}
+		}
+	}
+
+	// Рекурсивно проверяем внутренние ошибки
+	if e.inner != nil {
+		// Если внутренняя ошибка является joinErrors
+		var innerJoined *joinErrors
+		if errors.As(e.inner, &innerJoined) {
+			for _, err := range innerJoined.errors {
+				if errors.Is(err, target) {
+					return true
+				}
+			}
+		} else {
+			// Обычная проверка внутренней ошибки
+			if errors.Is(e.inner, target) {
+				return true
+			}
+		}
+	}
+
+	return false
 }
 
 // Message returns message.
