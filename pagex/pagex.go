@@ -9,7 +9,7 @@ type Pagination struct {
 
 func MaxPages(size, count int64) int64 {
 	if size <= 0 {
-		size = 20
+		size = defaultPageSize
 	}
 
 	if count <= 0 {
