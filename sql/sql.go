@@ -10,9 +10,13 @@
 package sql
 
 // Page returns offset & limit by pagination
-func Page(pageSize int64, page int) (offset int, limit int) {
+func Page(pageSize int64, page int, sizeMultiplier ...int64) (offset int, limit int) {
 	if page == 0 {
 		page = 1
+	}
+
+	if len(sizeMultiplier) > 0 {
+		pageSize = pageSize * sizeMultiplier[0]
 	}
 
 	offset = (page - 1) * int(pageSize)
