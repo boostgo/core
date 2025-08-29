@@ -72,7 +72,7 @@ func run(address string) error {
 	})
 
 	// print all registered routes (only in dev mode)
-	if !configx.Production() {
+	if !configx.Production() && !configx.GetBool("NO_ROUTE_PRINT") {
 		log.
 			Info().
 			Int("routes_count", len(handler.Routes())).
