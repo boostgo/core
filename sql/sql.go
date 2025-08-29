@@ -15,7 +15,7 @@ func Page(pageSize int64, page int, sizeMultiplier ...int64) (offset int, limit 
 		page = 1
 	}
 
-	if len(sizeMultiplier) > 0 {
+	if len(sizeMultiplier) > 0 && sizeMultiplier[0] > 0 {
 		pageSize = pageSize * sizeMultiplier[0]
 	}
 
