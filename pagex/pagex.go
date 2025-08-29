@@ -3,8 +3,9 @@ package pagex
 const defaultPageSize = 20
 
 type Pagination struct {
-	Page int   `default:"1"`
-	Size int64 `default:"20"`
+	Page           int   `default:"1"`
+	Size           int64 `default:"20"`
+	SizeMultiplier int64 `default:"1"`
 }
 
 func MaxPages(size, count int64) int64 {
